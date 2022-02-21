@@ -1,9 +1,13 @@
 import { controls, getGridData } from "./others.js"
 
+let settings = { speed: 200, border: true }
+
 // UI
+const scoreDiv = document.getElementById("score")
 const modal = document.querySelector(".modal")
 const startBtn = modal.querySelectorAll(".modal-btn")[0]
 const restartBtn = modal.querySelectorAll(".modal-btn")[1]
+
 // Get grid and populate it with boxes
 const grid = document.querySelector("#grid")
 const box = document.createElement("div")
@@ -16,8 +20,8 @@ const { cols, rows } = getGridData()
 let gameEnd = false
 let snek = { body: [{ x: 0, y: 0 }], move: "right" }
 
-/** from 2D index to 1D index. (row * length_of_row) + column */
-const oneDIndex = ({ x, y }) => y * rows + x
+/** from 2D index to 1D index. (row * width) + column */
+const oneDIndex = ({ x, y }) => y * cols + x
 
 const randomPos = () => {
   let index = Math.floor(Math.random() * cols * rows)
@@ -42,6 +46,7 @@ const game = () => {
   // Update
   setInterval(() => {
     if (gameEnd) return
+    // Remove
     grid.children.item(oneDIndex(snek.body.shift())).classList.remove("active")
 
     // Updating head
@@ -55,6 +60,9 @@ const game = () => {
       head = { x: head.x === 0 ? cols - 1 : head.x - 1, y: head.y }
     }
 
+    // Always push new coordinates to body
+    snek.body.push(head)
+
     // Updating head element
     let headClass = grid.children.item(oneDIndex(head)).classList
     if (headClass.contains("active")) {
@@ -62,22 +70,20 @@ const game = () => {
       gameEnd = true
       startBtn.style.display = "none"
       restartBtn.style.display = "grid"
-      modal.querySelector("h1").textContent = "GAME OVER"
+      modal.querySelector("h1").textContent = "GAME OVER 🙁"
       modal.style.display = "grid"
     } else if (headClass.contains("food")) {
       headClass.remove("food")
       headClass.add("active")
       // Push new coordinate/body
       snek.body.push(head)
+      scoreDiv.textContent = `Score: ${snek.body.length - 1}`
       // New food position
       grid.children.item(randomPos()).classList.add("food")
     } else {
       headClass.add("active")
     }
-
-    // Always push new coordinates to body
-    snek.body.push(head)
-  }, 150)
+  }, settings.speed)
 }
 
 // UI & game start

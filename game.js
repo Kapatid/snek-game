@@ -23,11 +23,11 @@ const randomPos = () => {
   let index = Math.floor(Math.random() * cols * rows)
 
   // 1D to 2D (x,y) index
-  let y = index / cols
-  let x = index % cols
+  let y = Math.floor(index / cols)
+  let x = Math.floor(index % cols)
 
   // Prevent apple at 0 and at snake's body
-  if (index === 0 || snek.body.some(coord => coord === { x, y })) {
+  if (index === 0 || snek.body.some(coord => coord.x === x && coord.y === y)) {
     index = randomPos()
   }
   return index
@@ -77,7 +77,7 @@ const game = () => {
 
     // Always push new coordinates to body
     snek.body.push(head)
-  }, 250)
+  }, 150)
 }
 
 // UI & game start

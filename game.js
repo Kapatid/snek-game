@@ -23,30 +23,30 @@ let snek = { body: [{ x: 0, y: 0 }], move: "right" }
 /** from 2D index to 1D index. (row * width) + column */
 const oneDIndex = ({ x, y }) => y * cols + x
 
-const randomPos = () => {
+const randomApplePos = () => {
   let index = Math.floor(Math.random() * cols * rows)
 
   // 1D to 2D (x,y) index
-  let y = Math.floor(index / cols)
-  let x = Math.floor(index % cols)
+  const y = Math.floor(index / cols)
+  const x = Math.floor(index % cols)
 
   // Prevent apple at 0 and at snake's body
   if (index === 0 || snek.body.some(coord => coord.x === x && coord.y === y)) {
-    index = randomPos()
+    index = randomApplePos()
   }
   return index
 }
 
 const game = () => {
-  // Start
+  // START
   let { body } = snek
   let head = body[body.length - 1]
-  grid.children.item(randomPos()).classList.add("food")
+  grid.children.item(randomApplePos()).classList.add("food")
 
-  // Update
+  // UPDATE
   setInterval(() => {
     if (gameEnd) return
-    // Remove
+    // Remove tail
     grid.children.item(oneDIndex(snek.body.shift())).classList.remove("active")
 
     // Updating head
@@ -70,6 +70,7 @@ const game = () => {
       gameEnd = true
       startBtn.style.display = "none"
       restartBtn.style.display = "grid"
+      modal.querySelector('p').style.display = "none"
       modal.querySelector("h1").textContent = "GAME OVER 🙁"
       modal.style.display = "grid"
     } else if (headClass.contains("food")) {
@@ -79,7 +80,7 @@ const game = () => {
       snek.body.push(head)
       scoreDiv.textContent = `Score: ${snek.body.length - 1}`
       // New food position
-      grid.children.item(randomPos()).classList.add("food")
+      grid.children.item(randomApplePos()).classList.add("food")
     } else {
       headClass.add("active")
     }

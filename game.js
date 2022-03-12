@@ -1,12 +1,17 @@
+// @ts-check
 import { controls, getGridData } from "./others.js"
 
 let settings = { speed: 200, border: true }
 
 // UI
 const scoreDiv = document.getElementById("score")
-const modal = document.querySelector(".modal")
-const startBtn = modal.querySelectorAll(".modal-btn")[0]
-const restartBtn = modal.querySelectorAll(".modal-btn")[1]
+const modal = document.getElementById("modal")
+const startBtn = /** @type {HTMLButtonElement} */ (modal.querySelectorAll(
+  ".modal-btn"
+)[0])
+const restartBtn = /** @type {HTMLButtonElement} */ (modal.querySelectorAll(
+  ".modal-btn"
+)[1])
 
 // Get grid and populate it with boxes
 const grid = document.querySelector("#grid")
@@ -70,7 +75,7 @@ const game = () => {
       gameEnd = true
       startBtn.style.display = "none"
       restartBtn.style.display = "grid"
-      modal.querySelector('p').style.display = "none"
+      modal.querySelector("p").style.display = "none"
       modal.querySelector("h1").textContent = "GAME OVER 🙁"
       modal.style.display = "grid"
     } else if (headClass.contains("food")) {
@@ -92,13 +97,13 @@ document.querySelectorAll(".modal-btn").forEach(btn => {
   startBtn.style.display = "grid"
   restartBtn.style.display = "none"
   btn.addEventListener("click", e => {
-    const btn = e.currentTarget
+    const currBtn = /** @type {HTMLButtonElement} */ (e.currentTarget)
 
-    if (btn.value === "start") {
+    if (currBtn.value === "start") {
       modal.style.display = "none"
       controls(snek)
       game()
-    } else if (btn.value === "restart") {
+    } else if (currBtn.value === "restart") {
       window.location.reload()
     }
   })

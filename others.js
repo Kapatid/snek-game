@@ -33,16 +33,3 @@ export const controls = snek => {
     }
   })
 }
-
-/* Not neeaded since I only needed a 1D array
-const grid = document.querySelector("#grid")
-const gridArray = []
-let item = 0
-for (let i = 0; i < rows; i++) {
-  let xArray = []
-  for (let j = 0; j < cols; j++) {
-    xArray.push(grid.children.item(item))
-    item += 1
-  }
-  gridArray.push(xArray)
-} */
